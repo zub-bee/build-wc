@@ -43,4 +43,15 @@ func main() {
 
 		fmt.Println(lines, args[2])
 	}
+
+	if len(args) > 2 && args[1] == "-w" {
+		words, err := wc.CalculateWords(args[2])
+		if err != nil {
+
+			fmt.Println(err)
+			os.Exit(2)
+		}
+
+		fmt.Println(words, args[2])
+	}
 }
