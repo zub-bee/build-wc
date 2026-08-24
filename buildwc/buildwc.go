@@ -54,3 +54,23 @@ func CalculateWords(file string) (string, error) {
 
 	return fmt.Sprintf("%d", wordCount), nil
 }
+
+func CalculateRunes(file string) (string, error) {
+	fileHandle, err := os.Open(file)
+	if err != nil {
+		return "", err
+	}
+	defer fileHandle.Close()
+
+	scanner := bufio.NewScanner(fileHandle)
+	scanner.Split(bufio.ScanRunes)
+	runeCount := 0
+	for scanner.Scan() {
+		runeCount++
+	}
+	if err := scanner.Err(); err != nil {
+		return "", err
+	}
+
+	return fmt.Sprintf("%d", runeCount), nil
+}

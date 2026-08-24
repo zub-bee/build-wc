@@ -9,7 +9,6 @@ import (
 
 func main() {
 	args := os.Args
-	fmt.Println(args)
 
 	// check if there's a flag
 	if len(args) < 1 {
@@ -53,5 +52,16 @@ func main() {
 		}
 
 		fmt.Println(words, args[2])
+	}
+
+	if len(args) > 2 && args[1] == "-m" {
+		runes, err := wc.CalculateRunes(args[2])
+		if err != nil {
+
+			fmt.Println(err)
+			os.Exit(2)
+		}
+
+		fmt.Println(runes, args[2])
 	}
 }

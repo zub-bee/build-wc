@@ -46,3 +46,17 @@ func TestWords(t *testing.T) {
 		t.Errorf("got %q words wanted %s words", got, want)
 	}
 }
+
+func TestRunes(t *testing.T) {
+
+	want := "339292"
+	got, err := wc.CalculateRunes(fileName)
+
+	if err != nil {
+		t.Errorf("error running the words %q", err)
+	}
+
+	if got != want {
+		t.Errorf("got %q words wanted %s words", got, want)
+	}
+}
