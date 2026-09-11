@@ -22,12 +22,6 @@ func main() {
 	}
 	defer fileHandler.Close()
 
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	defer fileHandler.Close()
-
 	// check if there's a flag
 	if len(args) == 2 {
 		// if there's no flag, give the default
