@@ -8,14 +8,34 @@ import (
 )
 
 func main() {
+
 	args := os.Args
+	lastIn := len(args) - 1
+	fileHandler := os.Stdin
+	filePath := args[lastIn]
+
+	var err error
+	fileHandler, err = wc.OpenFile(filePath)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	defer fileHandler.Close()
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	defer fileHandler.Close()
 
 	// check if there's a flag
 	if len(args) == 2 {
 		// if there's no flag, give the default
-		bytes, err := wc.CalculateBytes(args[1])
-		lines, err := wc.CalculateLines(args[1])
-		words, err := wc.CalculateWords(args[1])
+		lines, err := wc.CalculateLines(fileHandler)
+		fileHandler.Seek(0, 0)
+		words, err := wc.CalculateWords(fileHandler)
+		fileHandler.Seek(0, 0)
+		bytes, err := wc.CalculateBytes(fileHandler)
 
 		if err != nil {
 
@@ -24,7 +44,7 @@ func main() {
 			os.Exit(2)
 		}
 
-		fmt.Println(bytes, lines, words, args[1])
+		fmt.Println(lines, words, bytes, filePath)
 	}
 
 	// check if there's a file
@@ -33,7 +53,8 @@ func main() {
 
 	if len(args) > 2 && args[1] == "-c" {
 
-		bytes, err := wc.CalculateBytes(args[2])
+		bytes, err := wc.CalculateBytes(fileHandler)
+
 		if err != nil {
 			fmt.Println(err)
 
@@ -45,7 +66,7 @@ func main() {
 
 	if len(args) > 2 && args[1] == "-l" {
 
-		lines, err := wc.CalculateLines(args[2])
+		lines, err := wc.CalculateLines(fileHandler)
 		if err != nil {
 
 			fmt.Println(err)
@@ -57,7 +78,7 @@ func main() {
 
 	if len(args) > 2 && args[1] == "-w" {
 
-		words, err := wc.CalculateWords(args[2])
+		words, err := wc.CalculateWords(fileHandler)
 		if err != nil {
 
 			fmt.Println(err)
@@ -69,7 +90,7 @@ func main() {
 
 	if len(args) > 2 && args[1] == "-m" {
 
-		runes, err := wc.CalculateRunes(args[2])
+		runes, err := wc.CalculateRunes(fileHandler)
 		if err != nil {
 
 			fmt.Println(err)

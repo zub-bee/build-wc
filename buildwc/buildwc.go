@@ -3,31 +3,43 @@ package buildwc
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 )
 
-func CalculateBytes(file string) (string, error) {
-	fileInfo, err := os.Stat(file)
-	if err != nil {
-		return "", err
-	}
+func OpenFile(file string) (*os.File, error) {
 
-	byteValue := fmt.Sprintf("%d", fileInfo.Size())
-	return byteValue, nil
-}
-
-func CalculateLines(file string) (string, error) {
 	fileHandle, err := os.Open(file)
 	if err != nil {
+		return nil, err
+	}
+
+	return fileHandle, nil
+}
+
+func CalculateBytes(fileHandle io.Reader) (string, error) {
+
+	scanner := bufio.NewScanner(fileHandle)
+	scanner.Split(bufio.ScanBytes)
+	byteCount := 0
+	for scanner.Scan() {
+		byteCount++
+	}
+	if err := scanner.Err(); err != nil {
 		return "", err
 	}
-	defer fileHandle.Close()
+
+	return fmt.Sprintf("%d", byteCount), nil
+}
+
+func CalculateLines(fileHandle io.Reader) (string, error) {
 
 	scanner := bufio.NewScanner(fileHandle)
 	lineCount := 0
 	for scanner.Scan() {
 		lineCount++
 	}
+
 	if err := scanner.Err(); err != nil {
 		return "", err
 	}
@@ -35,12 +47,7 @@ func CalculateLines(file string) (string, error) {
 	return fmt.Sprintf("%d", lineCount), nil
 }
 
-func CalculateWords(file string) (string, error) {
-	fileHandle, err := os.Open(file)
-	if err != nil {
-		return "", err
-	}
-	defer fileHandle.Close()
+func CalculateWords(fileHandle io.Reader) (string, error) {
 
 	scanner := bufio.NewScanner(fileHandle)
 	scanner.Split(bufio.ScanWords)
@@ -55,12 +62,7 @@ func CalculateWords(file string) (string, error) {
 	return fmt.Sprintf("%d", wordCount), nil
 }
 
-func CalculateRunes(file string) (string, error) {
-	fileHandle, err := os.Open(file)
-	if err != nil {
-		return "", err
-	}
-	defer fileHandle.Close()
+func CalculateRunes(fileHandle io.Reader) (string, error) {
 
 	scanner := bufio.NewScanner(fileHandle)
 	scanner.Split(bufio.ScanRunes)
