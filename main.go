@@ -16,8 +16,7 @@ flags
 	-l calculate-lines
 	-w calculate-words
 	-c calculate-bytes
-	-m calculate-runes
-`
+	-m calculate-runes`
 
 func runCalculations(flag string, fileHandler *os.File, filePath string) {
 
