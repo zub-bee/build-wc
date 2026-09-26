@@ -21,6 +21,7 @@ func CalculateBytes(fileHandle io.Reader) (string, error) {
 
 	scanner := bufio.NewScanner(fileHandle)
 	scanner.Split(bufio.ScanBytes)
+
 	byteCount := 0
 	for scanner.Scan() {
 		byteCount++
